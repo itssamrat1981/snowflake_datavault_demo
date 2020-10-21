@@ -1,5 +1,5 @@
 --Create the STAGE Country table
-create or replace TABLE COUNTRY_STG (
+create or replace TABLE COETESTDB.DATAVAULT_STG.COUNTRY_STG (
 	COUNTRY_ABBV VARCHAR(5),
 	COUNTRY_NAME VARCHAR(100),
 	STAGE_REC_SRC VARCHAR(20),
@@ -7,24 +7,24 @@ create or replace TABLE COUNTRY_STG (
 );
 
 -- Insert data into STAGE Country table
-insert into country_stg values
-('US','UNITED STATED OF AMERICA','ISO'),
-('CA','CANADA','ISO'),
-('BR','BRAZIL','ISO'),
-('ZA','SOUTH AFRICA','ISO'),
-('AU','AUSTRALIA','ISO'),
-('SG','SINGAPORE','ISO'),
-('JP','JAPAN','ISO'),
-('KR','SOUTH KOREA','ISO'),
-('CN','CHINA','ISO'),
-('HK','HONG KONG','ISO'),
-('IN','INDIA','ISO'),
-('GB','UNITED KINGDOM','ISO'),
-('IE','IRELAND','ISO'),
-('FR','FRANCE','ISO'),
-('ES','SPAIN','ISO'),
-('IT','ITALY','ISO'),
-('SE','SWEDEN','ISO');
+insert into COETESTDB.DATAVAULT_STG.country_stg values
+('US','UNITED STATED OF AMERICA','ISO',current_date),
+('CA','CANADA','ISO',current_date),
+('BR','BRAZIL','ISO',current_date),
+('ZA','SOUTH AFRICA','ISO',current_date),
+('AU','AUSTRALIA','ISO',current_date),
+('SG','SINGAPORE','ISO',current_date),
+('JP','JAPAN','ISO',current_date),
+('KR','SOUTH KOREA','ISO',current_date),
+('CN','CHINA','ISO',current_date),
+('HK','HONG KONG','ISO',current_date),
+('IN','INDIA','ISO',current_date),
+('GB','UNITED KINGDOM','ISO',current_date),
+('IE','IRELAND','ISO',current_date),
+('FR','FRANCE','ISO',current_date),
+('ES','SPAIN','ISO',current_date),
+('IT','ITALY','ISO',current_date),
+('SE','SWEDEN','ISO',current_date);
 
 --Create the HUB Country table
 create or replace TABLE COETESTDB.DATAVAULT.HUB_COUNTRY (
@@ -63,16 +63,17 @@ INTO coetestdb.datavault.sat_country (hub_country_key, country_name,
 SELECT MD5(country_abbv) AS hash_key, 
                country_abbv, 
                country_name, 
-               MD5(country_abbv,country_name) AS hash_diff, 
+               MD5(concat(country_abbv,country_name)) AS hash_diff, 
                CURRENT_DATE AS load_dts,  
                stage_rec_src AS rec_src  
 FROM COETESTDB.DATAVAULT_STG.COUNTRY_STG ; 
 
 
 -- create Region Stage table 
-create or replace TABLE REGION_STG (
+create or replace TABLE COETESTDB.DATAVAULT_STG.REGION_STG (
 	REGION_ID VARCHAR(20),
 	REGION_NAME VARCHAR(100),
+	LAUNCH_YEAR NUMBER,
 	STAGE_REC_SRC VARCHAR(20),
 	LOAD_UPDATE_DT DATE
 );
@@ -151,7 +152,7 @@ SELECT MD5(region_id) AS hash_key,
 FROM COETESTDB.DATAVAULT_STG.REGION_STG ; 
 
 -- Create Country Region Relationship stage table
-create or replace table country_region_stg (
+create or replace table COETESTDB.DATAVAULT_STG.country_region_stg (
 COUNTRY_ABBV VARCHAR(5),
 REGION_ID VARCHAR(20),
 STAGE_REC_SRC VARCHAR(20),
@@ -159,7 +160,7 @@ LOAD_UPDATE_DT DATE
 );
 
 -- Load data into Country Region Relationship stage table
-insert into country_region_stg values
+insert into COETESTDB.DATAVAULT_STG.country_region_stg values
 ('US','us-east-1','AWS',CURRENT_DATE),
 ('US','us-east-2','AWS',CURRENT_DATE),
 ('US','us-west-1','AWS',CURRENT_DATE),
@@ -215,6 +216,7 @@ WHERE NOT EXISTS
 (SELECT 1 FROM COETESTDB.DATAVAULT.LINK_COUNTRY_REGION LCR WHERE LCR.HUB_COUNTRY_KEY = COUNTRY.HUB_COUNTRY_KEY
  AND LCR.HUB_REGION_KEY = REGION.HUB_REGION_KEY)
 
+------------Change in Day 2 load 
 -- updating the stage for region 
 update COETESTDB.DATAVAULT_STG.REGION_STG set region_name = 'South America (Sao Paulo)' where region_id = 'sa-east-1'
 
@@ -225,10 +227,12 @@ SELECT         MD5(region_id) AS hash_key,
                region_name, 
 			   launch_year,
                MD5(region_name||launch_year) AS hash_diff, 
-               CURRENT_DATE AS load_dts,  
+               CURRENT_DATE+1 AS load_dts,  
                stage_rec_src AS rec_src  
 FROM COETESTDB.DATAVAULT_STG.REGION_STG stg
 where not exists (select 1 from COETESTDB.DATAVAULT.sat_region sr where sr.hash_diff = MD5(stg.region_name||stg.launch_year))
+
+select * from coetestdb.datavault.sat_region where region_name like '%South America%'
 
 create or replace view coetestdb.datavault.country_region_v AS
 WITH country_region as
@@ -273,3 +277,5 @@ sat_rec_src AS DATA_SOURCE,
 SAT_LOAD_DT AS LOAD_DT
 FROM
 COUNTRY_REGION_VERSION_IND
+
+select * from coetestdb.datavault.country_region_v where country_name = 'BRAZIL'
