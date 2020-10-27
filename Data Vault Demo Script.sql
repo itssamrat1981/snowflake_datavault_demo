@@ -63,7 +63,7 @@ INTO coetestdb.datavault.sat_country (hub_country_key, country_name,
 SELECT MD5(country_abbv) AS hash_key, 
                country_abbv, 
                country_name, 
-               MD5(concat(country_abbv,country_name)) AS hash_diff, 
+               MD5(country_name) AS hash_diff, 
                CURRENT_DATE AS load_dts,  
                stage_rec_src AS rec_src  
 FROM COETESTDB.DATAVAULT_STG.COUNTRY_STG ; 
