@@ -1,0 +1,127 @@
+[
+  {
+    "Category" : "Transport, Logistics and Vehicles",
+    "Regions" : [
+      {
+        "Region" : "North",
+        "Sub-Categories" : [
+          {
+            "Sub-Category" : "Transport",
+            "EmployeeSales" : [
+              {
+                "Employee" : "Employee 1",
+                "Sales" : 1100,
+                "Comment" : "Above expectation | Expected 1000"
+              },
+              {
+                "Employee" : "Employee 2",
+                "Sales" : 900,
+                "Comment" : "Below expectation | Expected 1000"
+              }
+            ]
+          },
+          {
+            "Sub-Category" : "Logistics",
+            "EmployeeSales" : [
+              {
+                "Employee" : "Employee 1",
+                "Sales" : 5000
+              },
+              {
+                "Employee" : "Employee 2",
+                "Sales" : 6000
+              }
+            ]
+          },
+          {
+            "Sub-Category" : "Vehicles",
+            "EmployeeSales" : [
+              {
+                "Employee" : "Employee 1",
+                "Sales" : 7000
+              },
+              {
+                "Employee" : "Employee 2",
+                "Sales" : 8000
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Category" : "Hardware",
+    "Regions" : [
+      {
+        "Region" : "North",
+        "Sub-Categories" : [
+          {
+            "EmployeeSales" : [
+              {
+                "Employee" : "Employee 1",
+                "Sales" : 10000
+              },
+              {
+                "Employee" : "Employee 2",
+                "Sales" : 15000
+              }
+            ]
+          }
+        ]      
+      },
+      {
+        "Region" : "East",
+        "Sub-Categories" : [
+          {
+            "EmployeeSales" : [
+              {
+                "Employee" : "Employee 3",
+                "Sales" : 23000
+              },
+              {
+                "Employee" : "Employee 4",
+                "Sales" : 27000
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Region" : "South",
+        "Sub-Categories" : [
+          {
+            "EmployeeSales" : [
+              {
+                "Employee" : "Employee 5",
+                "Sales" : 20000
+              },
+              {
+                "Employee" : "Employee 6",
+                "Sales" : 30000
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Region" : "West",
+        "Sub-Categories" : [
+          {
+            "EmployeeSales" : [
+              {
+                "Employee" : "Employee 7",
+                "Sales" : 50000,
+                "Comment" : "Won the \"Hardware Salesman of the Year\" award"
+              },
+              {
+                "Employee" : "Employee 8",
+                "Sales" : 25000
+              }
+            ]
+          }
+        ]
+      }  
+    ]
+  }
+]
